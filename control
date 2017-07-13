@@ -1,0 +1,9 @@
+Package: com.ps.emojilocalization
+Name: EmojiLocalization
+Depends: mobilesubstrate, firmware (<< 9.1)
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Correct localization for emoji keyboard.
+Maintainer: PoomSmart
+Author: PoomSmart
+Section: Tweaks

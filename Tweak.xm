@@ -21,7 +21,10 @@ NSString *localizedStringForKey(NSString *key) {
 
 %new
 - (NSString *)displayName {
-    return localizedStringForKey([[[self class] displayNames] objectAtIndex:[[[self class] categoriesMap] indexOfObject:self.name]]);
+    NSString *name = self.name;
+    if (stringEqual(name, @"UIKeyboardEmojiCategoryRecent"))
+        return [NSClassFromString(@"UIKeyboardLayoutEmoji") localizedStringForKey:@"RECENTS_TITLE"];
+    return localizedStringForKey([[[self class] displayNames] objectAtIndex:[[[self class] categoriesMap] indexOfObject:name]]);
 }
 
 %end
@@ -52,7 +55,7 @@ NSString *localizedStringForKey(NSString *key) {
 %new
 + (NSArray <NSString *> *)categoriesMap {
     return @[
-        @"UIKeyboardEmojiCategoryRecents", @"UIKeyboardEmojiCategoryPeople", @"UIKeyboardEmojiCategoryNature", @"UIKeyboardEmojiCategoryFoodAndDrink", @"UIKeyboardEmojiCategoryCelebration", @"UIKeyboardEmojiCategoryActivity", @"UIKeyboardEmojiCategoryTravelAndPlaces", @"UIKeyboardEmojiCategoryObjectsAndSymbols", @"UIKeyboardEmojiCategoryFlags"];
+        @"UIKeyboardEmojiCategoryRecent", @"UIKeyboardEmojiCategoryPeople", @"UIKeyboardEmojiCategoryNature", @"UIKeyboardEmojiCategoryFoodAndDrink", @"UIKeyboardEmojiCategoryCelebration", @"UIKeyboardEmojiCategoryActivity", @"UIKeyboardEmojiCategoryTravelAndPlaces", @"UIKeyboardEmojiCategoryObjectsAndSymbols", @"UIKeyboardEmojiCategoryFlags"];
 }
 
 
@@ -100,9 +103,9 @@ NSString *localizedStringForKey(NSString *key) {
             %init(iOS78And83);
         }
     }
-    if (!isiOS6Up) {
-        %init(iOS5);
-    } else {
+    if (isiOS6Up) {
         %init(iOS6Up);
+    } else {
+        %init(iOS5);
     }
 }

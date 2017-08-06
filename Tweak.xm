@@ -10,8 +10,6 @@ NSString *displayName(UIKeyboardEmojiCategory *self) {
 
 NSString *localizedStringForKey(NSString *key) {
     NSBundle *bundle = [NSBundle bundleWithPath:realPath(@"/System/Library/TextInput/TextInput_emoji.bundle")];
-    if (![bundle isLoaded])
-        [bundle load];
     return [bundle localizedStringForKey:key value:nil table:@"Localizable2"];
 }
 
@@ -39,6 +37,11 @@ NSString *localizedStringForKey(NSString *key) {
     if ([key hasPrefix:@"Recents"])
         return %orig;
     return localizedStringForKey(key);
+}
+
+- (NSString *)displayName {
+    NSInteger categoryType = self.categoryType;
+    return categoryType < CATEGORIES_COUNT ? [[self class] localizedStringForKey:[[self class] displayNames][categoryType]] : %orig;
 }
 
 %end

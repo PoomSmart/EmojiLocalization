@@ -33,7 +33,7 @@ NSString *localizedStringForKey(NSString *key) {
 
 %hook UIKeyboardEmojiCategory
 
-+ (NSString *)localizedStringForKey: (NSString *)key {
++ (NSString *)localizedStringForKey:(NSString *)key {
     if ([key hasPrefix:@"Recents"])
         return %orig;
     return localizedStringForKey(key);
@@ -64,7 +64,7 @@ NSString *localizedStringForKey(NSString *key) {
 
 %group iOS83Up
 
-+ (NSString *)displayName: (NSInteger)categoryType {
++ (NSString *)displayName:(NSInteger)categoryType {
     NSString *name = [self displayNames][categoryType];
     return isiOS9Up ? [NSClassFromString(@"UIKeyboardEmojiCategory") localizedStringForKey:name] : [self localizedStringForKey:name];
 }

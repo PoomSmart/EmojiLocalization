@@ -1,6 +1,7 @@
 #import "../EmojiLibrary/Header.h"
 #import "../EmojiLibrary/PSEmojiUtilities.h"
 #import "../PSHeader/Misc.h"
+#import "../PSHeader/iOSVersions.h"
 
 NSString *displayName(UIKeyboardEmojiCategory *self) {
     NSInteger categoryType = self.categoryType;
@@ -45,7 +46,7 @@ NSString *localizedStringForKey(NSString *key) {
 
 + (NSString *)displayName:(NSInteger)categoryType {
     NSString *name = [self displayNames][categoryType];
-    return isiOS9Up ? [NSClassFromString(@"UIKeyboardEmojiCategory") localizedStringForKey:name] : [self localizedStringForKey:name];
+    return IS_IOS_OR_NEWER(iOS_9_0) ? [NSClassFromString(@"UIKeyboardEmojiCategory") localizedStringForKey:name] : [self localizedStringForKey:name];
 }
 
 %end
@@ -70,9 +71,9 @@ NSString *localizedStringForKey(NSString *key) {
 %end
 
 %ctor {
-    BOOL iOS78 = isiOS78;
-    BOOL iOS83Up = isiOS83Up;
-    BOOL iOS9Up = isiOS9Up;
+    BOOL iOS78 = IS_IOS_BETWEEN_EEX(iOS_7_0, iOS_9_0);
+    BOOL iOS83Up = IS_IOS_OR_NEWER(iOS_8_3);
+    BOOL iOS9Up = IS_IOS_OR_NEWER(iOS_9_0);
     if (!iOS83Up) {
         %init(preiOS83);
     }

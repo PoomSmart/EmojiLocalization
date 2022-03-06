@@ -3,7 +3,8 @@ Name: EmojiLocalization
 Depends: mobilesubstrate, firmware (>= 5.1), firmware (<< 9.1)
 Version: 1.0.0
 Architecture: iphoneos-arm
-Description: Correct localization for emoji keyboard.
+Description: Latest localization for emoji keyboard.
 Maintainer: PoomSmart
 Author: PoomSmart
 Section: Tweaks
+Tag: compatible::ios5, compatible::ios6, compatible::ios7, compatible::ios8, compatible::ios9

@@ -6,7 +6,7 @@
 NSString *displayName(UIKeyboardEmojiCategory *self) {
     NSInteger categoryType = self.categoryType;
     NSString *name = categoryType < CATEGORIES_COUNT ? [[self class] displayNames][categoryType] : nil;
-    return [NSClassFromString(@"UIKeyboardEmojiCategory") localizedStringForKey:name];
+    return [%c(UIKeyboardEmojiCategory) localizedStringForKey:name];
 }
 
 NSString *localizedStringForKey(NSString *key) {

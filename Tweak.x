@@ -1,15 +1,15 @@
-#import "../EmojiLibrary/Header.h"
-#import "../EmojiLibrary/PSEmojiUtilities.h"
-#import "../PSHeader/Misc.h"
-#import "../PSHeader/iOSVersions.h"
+#import <EmojiLibrary/Header.h>
+#import <EmojiLibrary/PSEmojiUtilities.h>
+#import <PSHeader/Misc.h>
+#import <PSHeader/iOSVersions.h>
 
-NSString *displayName(UIKeyboardEmojiCategory *self) {
+static NSString *displayName(UIKeyboardEmojiCategory *self) {
     NSInteger categoryType = self.categoryType;
     NSString *name = categoryType < CATEGORIES_COUNT ? [[self class] displayNames][categoryType] : nil;
     return [%c(UIKeyboardEmojiCategory) localizedStringForKey:name];
 }
 
-NSString *localizedStringForKey(NSString *key) {
+static NSString *localizedStringForKey(NSString *key) {
     NSBundle *bundle = [NSBundle bundleWithPath:realPath(@"/System/Library/TextInput/TextInput_emoji.bundle")];
     return [bundle localizedStringForKey:key value:nil table:@"Localizable2"];
 }
@@ -31,27 +31,54 @@ NSString *localizedStringForKey(NSString *key) {
 
 %hook UIKeyboardEmojiCategory
 
-%new
+%new(@@:)
 + (NSArray <NSString *> *)displayNames {
-    return @[ @"Recents Category", @"People Category", @"Nature Category", @"Food & Drink Category", @"Activity Category", @"Travel & Places Category", @"Objects Category", @"Symbols Category", @"Flags" ];
+    return @[
+        @"Recents Category",
+        @"People Category",
+        @"Nature Category",
+        @"Food & Drink Category",
+        @"Activity Category",
+        @"Travel & Places Category",
+        @"Objects Category",
+        @"Symbols Category",
+        @"Flags"
+    ];
 }
 
-%new
+%new(@@:)
 + (NSArray <NSString *> *)categoriesMap {
     return @[
-        @"UIKeyboardEmojiCategoryRecent", @"UIKeyboardEmojiCategoryPeople", @"UIKeyboardEmojiCategoryNature", @"UIKeyboardEmojiCategoryFoodAndDrink", @"UIKeyboardEmojiCategoryCelebration", @"UIKeyboardEmojiCategoryActivity", @"UIKeyboardEmojiCategoryTravelAndPlaces", @"UIKeyboardEmojiCategoryObjectsAndSymbols", @"UIKeyboardEmojiCategoryFlags"];
-}
-
-%group iOS83Up
-
-+ (NSString *)displayName:(NSInteger)categoryType {
-    NSString *name = [self displayNames][categoryType];
-    return IS_IOS_OR_NEWER(iOS_9_0) ? [NSClassFromString(@"UIKeyboardEmojiCategory") localizedStringForKey:name] : [self localizedStringForKey:name];
+        @"UIKeyboardEmojiCategoryRecent",
+        @"UIKeyboardEmojiCategoryPeople",
+        @"UIKeyboardEmojiCategoryNature",
+        @"UIKeyboardEmojiCategoryFoodAndDrink",
+        @"UIKeyboardEmojiCategoryCelebration",
+        @"UIKeyboardEmojiCategoryActivity",
+        @"UIKeyboardEmojiCategoryTravelAndPlaces",
+        @"UIKeyboardEmojiCategoryObjectsAndSymbols",
+        @"UIKeyboardEmojiCategoryFlags"
+    ];
 }
 
 %end
 
+%group iOS83Up
+
+%hook UIKeyboardEmojiCategory
+
++ (NSString *)displayName:(NSInteger)categoryType {
+    NSString *name = [self displayNames][categoryType];
+    return IS_IOS_OR_NEWER(iOS_9_0) ? [%c(UIKeyboardEmojiCategory) localizedStringForKey:name] : [self localizedStringForKey:name];
+}
+
+%end
+
+%end
+
 %group preiOS83
+
+%hook UIKeyboardEmojiCategory
 
 - (NSString *)displayName {
     return displayName(self);
@@ -59,7 +86,11 @@ NSString *localizedStringForKey(NSString *key) {
 
 %end
 
+%end
+
 %group iOS78And83
+
+%hook UIKeyboardEmojiCategory
 
 - (NSString *)name {
     NSUInteger categoryType = self.categoryType;
